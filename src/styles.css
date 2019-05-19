@@ -2,7 +2,7 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
 .divbackground{
-    background-color: blueviolet;
+    background-color: rgb(138, 43, 226);
     color: white;
 }
 
@@ -10,6 +10,11 @@
     text-align: center;
     vertical-align: middle;
     line-height: 90px;
+    
+}
+
+.wrapper {
+    position: relative;
 }
 
 .registration {
@@ -22,4 +27,25 @@
     padding: 10px;
     text-align: center;
     vertical-align: middle;
+}
+
+.disable-form {
+    opacity:0.5; 
+    pointer-events:none;
+ }
+
+.btn-login{
+    z-index: 10;
+    position: absolute;
+    top: 30%;
+    left:10%;
+    right: 10%;
+}
+
+.hide{
+    display: none;
+}
+
+.show{
+    display: block;
 }

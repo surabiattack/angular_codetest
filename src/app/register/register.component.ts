@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Register } from '../register';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { RegisterService } from '../register.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -31,7 +32,7 @@ export class RegisterComponent implements OnInit {
   respMessage: any;
   respArrMessage:string[]=[];
 
-  constructor(private registerService:RegisterService) { 
+  constructor(private registerService:RegisterService, private router: Router) { 
     
   }
 
@@ -60,7 +61,9 @@ export class RegisterComponent implements OnInit {
         this.respMessage = success.message;
         this.respArrMessage = success.arrMessage;
         console.log(this.respArrMessage);
-        this.disableForm = false;
+
+        if(this.respStatus != 'success')
+          this.disableForm = false;
       }, 
       error => {
         this.disableForm = false;
@@ -69,4 +72,7 @@ export class RegisterComponent implements OnInit {
     );
   }
 
+  onClickLogin(){
+    this.router.navigateByUrl('/dashboard');
+  }
 }
