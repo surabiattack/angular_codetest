@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+.divbackground{
+    background-color: blueviolet;
+    color: white;
+}
+
+.box {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 90px;
+}
+
+.registration {
+    margin: 5% 20% 10px 20%
+}
+
+.error {
+    background-color: red;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
