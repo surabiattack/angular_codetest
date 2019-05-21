@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Register } from '../register';
-import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { RegisterService } from '../register.service';
 import { Router } from '@angular/router';
+import * as libPhoneNumber from 'libphonenumber-js';
 
 @Component({
   selector: 'app-register',
@@ -31,6 +32,7 @@ export class RegisterComponent implements OnInit {
   respStatus: any;
   respMessage: any;
   respArrMessage:string[]=[];
+  regForm:FormGroup;
 
   constructor(private registerService:RegisterService, private router: Router) { 
     
@@ -40,6 +42,25 @@ export class RegisterComponent implements OnInit {
     for(let i = 1900; i < 2019; i++){
       this.lYear.push(i);
     }
+
+    this.regForm = new FormGroup({
+      'mobileNumber': new FormControl(this.register.mobileNumber,[
+        Validators.required
+      ]),
+      'firstName': new FormControl(this.register.firstName,[
+        Validators.required
+      ]),
+      'lastName': new FormControl(this.register.lastName,[
+        Validators.required
+      ]),
+      'month': new FormControl(this.register.monthBirth,[]),
+      'date': new FormControl(this.register.dateBirth,[]),
+      'year': new FormControl(this.register.yearBirth,[]),
+      'gender': new FormControl(this.register.gender,[]),
+      'email': new FormControl(this.register.email,
+        Validators.compose([Validators.email, Validators.required])
+      )
+    })
   }
 
   lDay(i:number){
@@ -47,10 +68,52 @@ export class RegisterComponent implements OnInit {
   }
 
   onFormSubmit(){
-    this.disableForm = true;
+    this.respArrMessage = new Array();
+    // this.disableForm = true;
     this.submitted = true;
-    this.RegisterUser();
+    // this.RegisterUser();
+    //this.regForm.disable();
 
+    if(this.regForm.valid){
+      this.regForm.get('mobileNumber');
+      if(this.validatePhoneNumber()){
+        console.log('data valid');
+        this.RegisterUser();
+      }else{
+        console.log('phone invalid');
+      }
+    }
+    else{
+      this.findInvalidControls();
+      this.regForm.enable();
+    }
+  }
+
+  validatePhoneNumber(){
+    const number = libPhoneNumber.parsePhoneNumberFromString(String(this.regForm.get('mobileNumber').value), "ID");
+    return number.isValid();
+  }
+
+  findInvalidControls(){
+    if(this.regForm.get('mobileNumber').invalid){
+      this.respArrMessage.push('Mobile Number invalid');
+    }
+
+    if(this.regForm.get('firstName').invalid){
+      this.respArrMessage.push('First Name Required');
+    }
+
+    if(this.regForm.get('lastName').invalid){
+      this.respArrMessage.push('Last Name Required');
+    }
+
+    if(this.regForm.get('email').hasError('required')){
+      this.respArrMessage.push('Email Required');
+    }
+
+    if(this.regForm.get('email').hasError('email')){
+      this.respArrMessage.push('Email is invalid');
+    }
   }
 
   RegisterUser(){
@@ -62,12 +125,15 @@ export class RegisterComponent implements OnInit {
         this.respArrMessage = success.arrMessage;
         console.log(this.respArrMessage);
 
-        if(this.respStatus != 'success')
-          this.disableForm = false;
+        if(this.respStatus == 'success')
+          this.regForm.disable();
+          //this.disableForm = false;
       }, 
       error => {
-        this.disableForm = false;
-        console.error(error)
+        //this.disableForm = false;
+        this.regForm.enable();
+        this.respArrMessage = error.message;
+        console.log(error);
       }
     );
   }
