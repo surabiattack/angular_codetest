@@ -81,6 +81,8 @@ export class RegisterComponent implements OnInit {
         this.RegisterUser();
       }else{
         console.log('phone invalid');
+        this.respArrMessage.push('Not Indonesia Mobile Number Format');
+        this.regForm.enable();
       }
     }
     else{
@@ -117,7 +119,8 @@ export class RegisterComponent implements OnInit {
   }
 
   RegisterUser(){
-    this.registerService.CreateUser(this.register).subscribe(
+    //console.log(this.regForm.value)
+    this.registerService.CreateUser(this.regForm.value).subscribe(
       (success: any) => { 
         // console.log(success);
         this.respStatus = success.status;
