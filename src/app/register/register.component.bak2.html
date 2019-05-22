@@ -1,0 +1,74 @@
+<div id="reg" class="registration">
+  <div *ngIf="submitted && respStatus != 'success' " class="error">
+    <p>{{respArrMessage}}</p>
+  </div>
+  <form (ngSubmit)="onFormSubmit()" [class]="disableForm || respStatus == 'success'?'disable-form':''">
+    <h4>Registration</h4>
+    <div class="">
+      <div class="form-group">
+        <input type="number" class="form-control" id="mobileNumber" placeholder="Mobile Number" 
+          required [(ngModel)]="register.mobileNumber" name="mobileNumber"
+          />
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id="firstName" placeholder="First Name"
+          required [(ngModel)]="register.firstName" name="firstName" />
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id="lastName" placeholder="Last Name"
+        required [(ngModel)]="register.lastName" name="lastName" />
+      </div>
+      <div class="form-row">
+          <div class="col">
+            <select id="month" class="form-control" [(ngModel)]="register.monthBirth" name="month" >
+                <option value="undefined" hidden>Month</option>
+                <option *ngFor="let month of lMonth" [value]="month.value">
+                  {{month.label}}
+                </option>
+            </select>
+          </div>
+          <div class="col">
+            <select id="date" class="form-control" [(ngModel)]="register.dateBirth" name="date" > 
+                <option value="undefined" hidden>Date</option>
+                <option *ngFor="let date of lDay(31); let i=index" [value]="i+1">
+                  {{i+1}}
+                </option>
+            </select>
+          </div>
+          <div class="col">
+            <select id="year" class="form-control" [(ngModel)]="register.yearBirth" name="year" >
+                <option value="undefined" hidden>Year</option>
+                <option *ngFor="let year of lYear" [value]="year">
+                    {{year}}
+                  </option>
+            </select> 
+          </div>
+      </div>
+      <div class="form-group">
+          <label class="radio-inline">
+            <input type="radio" name="gender" value="M"  [(ngModel)]="register.gender">Male
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="gender" value="F" [(ngModel)]="register.gender">Female
+          </label>
+      </div>
+      <div class="form-group">
+        <input type="email" class="form-control" id="email" placeholder="Email"
+        required [(ngModel)]="register.email" name="email" />
+      </div>
+      <div class="form-group">
+        <button type="submit" class="form-control divbackground">Register</button>
+      </div>
+    </div>
+  </form> 
+  <div class="divbackground wrapper">
+    <div [class]="disableForm || respStatus == 'success'?'box disable-form':'box'">
+      <p>
+        Footer
+      </p>
+    </div>
+    <div [class]="respStatus == 'success'?'btn-login show':'hide'">
+      <button type="button" class="form-control divbackground" (click)="onClickLogin()">Login</button>
+    </div>
+  </div>
+</div>
